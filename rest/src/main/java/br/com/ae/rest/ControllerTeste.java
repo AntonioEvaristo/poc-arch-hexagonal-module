@@ -1,0 +1,15 @@
+package br.com.ae.rest;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/produtos")
+public class ControllerTeste {
+
+    @GetMapping
+    public String findTest(){
+        return "Hello Java 11, Spring 2.3";
+    }
+}
