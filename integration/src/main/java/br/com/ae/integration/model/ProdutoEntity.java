@@ -12,17 +12,20 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ProdutoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String codigo;
     private String nome;
     private BigDecimal valor;
     private Integer quantidade;
     @ManyToOne
-    private CategoriaEntity categoria;
+    private CategoriaEntity categoriaEntity;
     @Enumerated(EnumType.STRING)
     private ProdutoDisponibilidade produtoDisponibilidade;
+
 }

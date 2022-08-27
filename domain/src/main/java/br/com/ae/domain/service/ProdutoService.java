@@ -20,14 +20,14 @@ public final class ProdutoService implements IProdutoService {
     private final IProdutoRepository produtoRepository;
 
     @Override
-    public Optional<Produto> buscarProduto(String codigo) throws ProdutoException {
+    public Produto buscarProduto(String codigo) throws ProdutoException {
         if (StringUtils.isBlank(codigo)) {
             log.error("Codigo do produto não pode ser nulo ou vazio {}", codigo);
             throw new ProdutoException("Codigo do produto nulo/vazio");
         }
         Optional<Produto> produto = VerificaDisponibilidade.get(produtoRepository.findByCodigo(codigo));
-        log.info("Produto localizado {}", produto);
-        return produto;
+        log.info("Produto {}", produto);
+        return produto.isEmpty() ? produto.orElseThrow(() -> new ProdutoException("Produto não existe!!")) : produto.get();
     }
 
     @Override
@@ -52,18 +52,18 @@ public final class ProdutoService implements IProdutoService {
     }
 
     @Override
-    public Optional<Produto> cadastrarProduto(Produto produto) throws ProdutoException {
+    public Produto cadastrarProduto(Produto produto) throws ProdutoException {
         if (Boolean.TRUE.equals(getProduto(produto).isPresent())) {
             log.error("Produto já existe! {}", produto);
             throw new ProdutoException("Produto já existe!!");
         }
         Produto produtoSave = produtoRepository.save(produto);
         log.info("Produto salvo {}", produtoSave);
-        return Optional.of(produtoSave);
+        return produtoSave;
     }
 
     @Override
-    public Optional<Produto> atualizaProduto(Produto produto) throws ProdutoException {
+    public Produto atualizaProduto(Produto produto) throws ProdutoException {
         Optional<Produto> prd = getProduto(produto);
         if (prd.isEmpty()) {
             log.error("Produto não existe! {}", produto);
@@ -71,7 +71,7 @@ public final class ProdutoService implements IProdutoService {
         }
         Produto produtoAtualizado = produtoRepository.save(produto);
         log.info("Produto atualizado! {}", produtoAtualizado);
-        return Optional.of(produtoAtualizado);
+        return produtoAtualizado;
     }
 
     private Optional<Produto> getProduto(Produto produto) {

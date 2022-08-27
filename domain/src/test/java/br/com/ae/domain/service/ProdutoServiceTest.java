@@ -82,11 +82,12 @@ public class ProdutoServiceTest {
     @Test
     public void buscarProdutoComSucesso() throws ProdutoException {
         Mockito.when(produtoRepository.findByCodigo(Mockito.anyString())).thenReturn(Optional.of(produto));
-        Optional<Produto> produtoRetorno = produtoService.buscarProduto(produto.getCodigo());
-        Assert.assertEquals(produto.getCodigo(), produtoRetorno.get().getCodigo());
-        Assert.assertEquals(ProdutoDisponibilidade.DISPONIVEL, produtoRetorno.get().getProdutoDisponibilidade());
-        Assert.assertEquals(produto.getCategoria().getNome(), produtoRetorno.get().getCategoria().getNome());
-        Assert.assertEquals(produto, produtoRetorno.get());
+        Produto produtoRetorno = produtoService.buscarProduto(produto.getCodigo());
+        Assert.assertNotNull(produtoRetorno);
+        Assert.assertEquals(produto.getCodigo(), produtoRetorno.getCodigo());
+        Assert.assertEquals(ProdutoDisponibilidade.DISPONIVEL, produtoRetorno.getProdutoDisponibilidade());
+        Assert.assertEquals(produto.getCategoria().getNome(), produtoRetorno.getCategoria().getNome());
+        Assert.assertEquals(produto, produtoRetorno);
     }
 
     @Test
@@ -139,8 +140,8 @@ public class ProdutoServiceTest {
     public void cadastrarProdutoComSucesso() throws ProdutoException {
         Mockito.when(produtoRepository.findByCodigo(produto.getCodigo())).thenReturn(Optional.empty());
         Mockito.when(produtoRepository.save(produto)).thenReturn(produto);
-        Optional<Produto> produtoSalvo = produtoService.cadastrarProduto(produto);
-        Assert.assertTrue(produtoSalvo.isPresent());
+        Produto produtoSalvo = produtoService.cadastrarProduto(produto);
+        Assert.assertNotNull(produtoSalvo);
     }
 
     @Test
@@ -166,10 +167,10 @@ public class ProdutoServiceTest {
                 .build();
         Mockito.when(produtoRepository.findByCodigo(Mockito.anyString())).thenReturn(Optional.of(produto));
         Mockito.when(produtoRepository.save(prd)).thenReturn(prd);
-        Optional<Produto> produtoAtualizado = produtoService.atualizaProduto(prd);
-        Assert.assertTrue(produtoAtualizado.isPresent());
-        Assert.assertEquals(prd.getQuantidade(), produtoAtualizado.get().getQuantidade());
-        Assert.assertEquals(prd.getValor(), produtoAtualizado.get().getValor());
+        Produto produtoAtualizado = produtoService.atualizaProduto(prd);
+        Assert.assertNotNull(produtoAtualizado);
+        Assert.assertEquals(prd.getQuantidade(), produtoAtualizado.getQuantidade());
+        Assert.assertEquals(prd.getValor(), produtoAtualizado.getValor());
     }
 
     @Test
