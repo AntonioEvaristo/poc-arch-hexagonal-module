@@ -1,20 +1,18 @@
 package br.com.ae.domain.model;
 
 import br.com.ae.domain.enums.ProdutoDisponibilidade;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-@Getter
 @Builder
-@ToString
+@Setter
+@Getter
 @EqualsAndHashCode
+@ToString
 public class Produto {
     @Positive(message = "Codigo deve ser positivo")
     @NotNull(message = "Codigo não pode ser nulo")

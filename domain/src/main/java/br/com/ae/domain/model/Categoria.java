@@ -1,18 +1,16 @@
 package br.com.ae.domain.model;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-@Getter
 @Builder
-@ToString
+@Setter
+@Getter
 @EqualsAndHashCode
+@ToString
 public class Categoria {
     @Positive(message = "Codigo deve ser positivo")
     @NotNull(message = "Codigo não pode ser nulo")

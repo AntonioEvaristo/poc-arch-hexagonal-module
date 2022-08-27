@@ -5,7 +5,7 @@ import br.com.ae.domain.exception.CategoriaException;
 import br.com.ae.domain.exception.ProdutoException;
 import br.com.ae.domain.model.Categoria;
 import br.com.ae.domain.model.Produto;
-import br.com.ae.domain.repository.ProdutoRepository;
+import br.com.ae.domain.repository.IProdutoRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,9 +22,8 @@ public class ProdutoServiceTest {
 
     @InjectMocks
     public ProdutoService produtoService;
-
     @Mock
-    private ProdutoRepository produtoRepository;
+    private IProdutoRepository produtoRepository;
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -110,18 +109,18 @@ public class ProdutoServiceTest {
     }
 
     @Test
-    public void listarProdutosIndisponiveisComSucesso(){
+    public void listarProdutosIndisponiveisComSucesso() {
         Mockito.when(produtoRepository.findAll()).thenReturn(produtos);
         List<Produto> listaProdutos = produtoService.listarProdutos(ProdutoDisponibilidade.INDISPONIVEL);
         Assert.assertFalse(listaProdutos.isEmpty());
-        Assert.assertEquals(1,listaProdutos.size());
+        Assert.assertEquals(1, listaProdutos.size());
         Assert.assertEquals("utensilios", listaProdutos.get(0).getCategoria().getNome());
     }
 
     @Test
     public void listaProdutoPorCategoriaComSucesso() throws CategoriaException {
         String nomeCategoria = "utensilios";
-        Mockito.when(produtoRepository.findByCategoriaNome(nomeCategoria)).thenReturn(Arrays.asList(produto,produto));
+        Mockito.when(produtoRepository.findByCategoriaNome(nomeCategoria)).thenReturn(Arrays.asList(produto, produto));
         List<Produto> protudosOpt = produtoService.listarProdutosPorCategoria(nomeCategoria);
         Assert.assertFalse(protudosOpt.isEmpty());
         Assert.assertEquals(2, protudosOpt.size());
@@ -150,5 +149,35 @@ public class ProdutoServiceTest {
         expectedException.expect(ProdutoException.class);
         expectedException.expectMessage("Produto já existe!!");
         produtoService.cadastrarProduto(produto);
+    }
+
+    @Test
+    public void atualizarProdutoComSucesso() throws ProdutoException {
+        Produto prd = Produto.builder()
+                .codigo("100")
+                .nome("Garrafa")
+                .valor(BigDecimal.ONE)
+                .quantidade(50)
+                .produtoDisponibilidade(ProdutoDisponibilidade.DISPONIVEL)
+                .categoria(Categoria.builder()
+                        .codigo("1")
+                        .nome("utensilios")
+                        .build())
+                .build();
+        Mockito.when(produtoRepository.findByCodigo(Mockito.anyString())).thenReturn(Optional.of(produto));
+        Mockito.when(produtoRepository.save(prd)).thenReturn(prd);
+        Optional<Produto> produtoAtualizado = produtoService.atualizaProduto(prd);
+        Assert.assertTrue(produtoAtualizado.isPresent());
+        Assert.assertEquals(prd.getQuantidade(), produtoAtualizado.get().getQuantidade());
+        Assert.assertEquals(prd.getValor(), produtoAtualizado.get().getValor());
+    }
+
+    @Test
+    public void atualizarProdutoException() throws ProdutoException {
+        Mockito.when(produtoRepository.findByCodigo(Mockito.anyString())).thenReturn(Optional.empty());
+        expectedException.expect(ProdutoException.class);
+        expectedException.expectMessage("Produto não existe!!");
+        produtoService.atualizaProduto(produto);
+
     }
 }

@@ -4,10 +4,9 @@ import br.com.ae.domain.enums.ProdutoDisponibilidade;
 import br.com.ae.domain.exception.CategoriaException;
 import br.com.ae.domain.exception.ProdutoException;
 import br.com.ae.domain.model.Produto;
-import br.com.ae.domain.repository.ProdutoRepository;
+import br.com.ae.domain.repository.IProdutoRepository;
 import br.com.ae.domain.util.VerificaDisponibilidade;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,11 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Log4j2
 public final class ProdutoService implements IProdutoService {
-    ProdutoRepository produtoRepository;
+    private final IProdutoRepository produtoRepository;
 
     @Override
     public Optional<Produto> buscarProduto(String codigo) throws ProdutoException {
-        if(StringUtils.isBlank(codigo)){
+        if (StringUtils.isBlank(codigo)) {
             log.error("Codigo do produto não pode ser nulo ou vazio {}", codigo);
             throw new ProdutoException("Codigo do produto nulo/vazio");
         }
@@ -35,14 +34,15 @@ public final class ProdutoService implements IProdutoService {
     public List<Produto> listarProdutos(ProdutoDisponibilidade produtoDisponibilidade) {
         List<Produto> produtos = produtoRepository.findAll()
                 .stream()
-                .filter(prd -> produtoDisponibilidade.equals(prd.getProdutoDisponibilidade())).collect(Collectors.toList());
+                .filter(prd -> produtoDisponibilidade.equals(prd.getProdutoDisponibilidade()))
+                .collect(Collectors.toList());
         log.info("Lista de todos produtos {}", produtos);
         return produtos;
     }
 
     @Override
     public List<Produto> listarProdutosPorCategoria(String nomeCategoria) throws CategoriaException {
-        if(StringUtils.isBlank(nomeCategoria)){
+        if (StringUtils.isBlank(nomeCategoria)) {
             log.error("Nome da categoria não pode ser nulo ou vazio");
             throw new CategoriaException("Nome da categoria nulo/vazio");
         }
@@ -51,10 +51,9 @@ public final class ProdutoService implements IProdutoService {
         return produtos;
     }
 
-    //TODO implementar regra para cada
     @Override
     public Optional<Produto> cadastrarProduto(Produto produto) throws ProdutoException {
-        if (Boolean.TRUE.equals(existeProduto(produto))) {
+        if (Boolean.TRUE.equals(getProduto(produto).isPresent())) {
             log.error("Produto já existe! {}", produto);
             throw new ProdutoException("Produto já existe!!");
         }
@@ -63,8 +62,20 @@ public final class ProdutoService implements IProdutoService {
         return Optional.of(produtoSave);
     }
 
-    private Boolean existeProduto(Produto produto) {
-        return produtoRepository.findByCodigo(produto.getCodigo()).isPresent();
+    @Override
+    public Optional<Produto> atualizaProduto(Produto produto) throws ProdutoException {
+        Optional<Produto> prd = getProduto(produto);
+        if (prd.isEmpty()) {
+            log.error("Produto não existe! {}", produto);
+            throw new ProdutoException("Produto não existe!!");
+        }
+        Produto produtoAtualizado = produtoRepository.save(produto);
+        log.info("Produto atualizado! {}", produtoAtualizado);
+        return Optional.of(produtoAtualizado);
+    }
+
+    private Optional<Produto> getProduto(Produto produto) {
+        return produtoRepository.findByCodigo(produto.getCodigo());
     }
 }
 

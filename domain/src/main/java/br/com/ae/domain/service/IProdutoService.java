@@ -10,7 +10,12 @@ import java.util.Optional;
 
 public interface IProdutoService {
     Optional<Produto> buscarProduto(String codigo) throws ProdutoException;
+
     List<Produto> listarProdutos(ProdutoDisponibilidade produtoDisponibilidade);
+
     List<Produto> listarProdutosPorCategoria(String nomeCategoria) throws CategoriaException;
+
     Optional<Produto> cadastrarProduto(Produto produto) throws ProdutoException;
+
+    Optional<Produto> atualizaProduto(Produto produto) throws ProdutoException;
 }
