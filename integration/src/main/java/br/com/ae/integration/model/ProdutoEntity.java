@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Produto")
@@ -21,11 +22,13 @@ public class ProdutoEntity {
     @Column(unique = true)
     private String codigo;
     private String nome;
+    private String descricao;
     private BigDecimal valor;
     private Integer quantidade;
     @ManyToOne
     private CategoriaEntity categoriaEntity;
     @Enumerated(EnumType.STRING)
     private ProdutoDisponibilidade produtoDisponibilidade;
+    private LocalDate dataCadastro = LocalDate.now();
 
 }

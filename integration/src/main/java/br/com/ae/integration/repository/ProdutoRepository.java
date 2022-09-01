@@ -19,6 +19,7 @@ public class ProdutoRepository implements IProdutoRepository {
 
     private final ProdutoEntityRepository produtoEntityRepository;
     private final CategoriaEntityRepository categoriaEntityRepository;
+
     @Override
     public Optional<Produto> findByCodigo(String codigo) {
         return produtoEntityRepository.findByCodigo(codigo).map(ProdutoMapper.INSTANCE::produtoEntityToProduto);
@@ -26,22 +27,16 @@ public class ProdutoRepository implements IProdutoRepository {
 
     @Override
     public Produto save(Produto produto) {
-        produtoEntityRepository.save(getProdutoEntity(produto));
-        return produto;
+        ProdutoEntity produtoEntity = produtoEntityRepository.save(getProdutoEntity(produto));
+        return ProdutoMapper.INSTANCE.produtoEntityToProduto(produtoEntity);
     }
 
     private ProdutoEntity getProdutoEntity(Produto produto) {
-        return ProdutoMapper.INSTANCE.produtoToProdutoEntity(produto, buscarCategoria(produto));
+        return ProdutoMapper.INSTANCE.produtoToProdutoEntitySave(produto, buscarCategoria(produto));
     }
 
     private CategoriaEntity buscarCategoria(Produto produto) {
-        Optional<CategoriaEntity> categoriaEntity = categoriaEntityRepository.findByCodigo(produto.getCategoria().getCodigo());
-        return categoriaEntity.orElseGet(CategoriaEntity::new);
-    }
-
-    @Override
-    public List<Produto> findByCategoriaNome(String nomeCategoria) {
-        return null;
+        return categoriaEntityRepository.findByCodigo(produto.getCategoria().getCodigo()).orElseGet(CategoriaEntity::new);
     }
 
     @Override
@@ -49,5 +44,16 @@ public class ProdutoRepository implements IProdutoRepository {
         return produtoEntityRepository.findAll()
                 .stream()
                 .map(ProdutoMapper.INSTANCE::produtoEntityToProduto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Produto update(Produto produto) {
+        ProdutoEntity produtoEntity = produtoEntityRepository.save(ProdutoMapper.INSTANCE.produtoToProdutoEntity(produto));
+        return ProdutoMapper.INSTANCE.produtoEntityToProduto(produtoEntity);
+    }
+
+    @Override
+    public Optional<Produto> findById(Long id) {
+        return produtoEntityRepository.findById(id).map(ProdutoMapper.INSTANCE::produtoEntityToProduto);
     }
 }

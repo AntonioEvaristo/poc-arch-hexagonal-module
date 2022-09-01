@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("v1/rest/produtos")
@@ -21,8 +20,9 @@ public class ProdutoController {
     private final IProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listarProdutos(@RequestParam ProdutoDisponibilidade produtoDisponibilidade){
-        return new ResponseEntity<>(produtoService.listarProdutos(produtoDisponibilidade), HttpStatus.OK);
+    public ResponseEntity<List<Produto>> listarProdutos(@RequestParam ProdutoDisponibilidade produtoDisponibilidade,
+                                                        @RequestParam(required = false) String nomeCategoria){
+        return new ResponseEntity<>(produtoService.listarProdutos(produtoDisponibilidade, nomeCategoria), HttpStatus.OK);
     }
 
     @GetMapping("/{codigo}")
@@ -32,6 +32,11 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<Produto> cadastrarProduto(@RequestBody @Valid Produto produto) throws ProdutoException {
-        return new ResponseEntity<>(produtoService.cadastrarProduto(produto), HttpStatus.OK);
+        return new ResponseEntity<>(produtoService.cadastrarProduto(produto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> atualizarProduto(@RequestBody @Valid Produto produto,@PathVariable Long id) throws ProdutoException {
+        return new ResponseEntity<>(produtoService.atualizaProduto(produto,id), HttpStatus.OK);
     }
 }

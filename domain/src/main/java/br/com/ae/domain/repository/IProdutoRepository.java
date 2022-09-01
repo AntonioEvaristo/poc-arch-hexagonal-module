@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface IProdutoRepository {
     Optional<Produto> findByCodigo(String codigo);
     Produto save(Produto produto);
-    List<Produto> findByCategoriaNome(String nomeCategoria);
     List<Produto> findAll();
+    Produto update(Produto produto);
+    Optional<Produto> findById(Long id);
 }
