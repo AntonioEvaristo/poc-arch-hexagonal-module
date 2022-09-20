@@ -15,10 +15,10 @@ public class Categoria {
 
     private Long id;
 
-    @Positive(message = "Codigo deve ser positivo")
-    @NotNull(message = "Codigo não pode ser nulo")
+    @Positive(message = "Deve ser positivo")
+    @NotNull(message = "Não pode ser nulo")
     private String codigo;
 
-    @NotBlank(message = "Nome não pode ser nulo ou vazio")
+    @NotBlank(message = "Não pode ser nulo ou vazio")
     private String nome;
 }

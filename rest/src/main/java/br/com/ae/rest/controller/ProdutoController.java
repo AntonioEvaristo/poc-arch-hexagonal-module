@@ -1,4 +1,4 @@
-package br.com.ae.rest;
+package br.com.ae.rest.controller;
 
 import br.com.ae.domain.enums.ProdutoDisponibilidade;
 import br.com.ae.domain.exception.ProdutoException;
@@ -9,11 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/rest/produtos")
+@RequestMapping("/v1/rest/produtos")
 @RequiredArgsConstructor
 public class ProdutoController {
 
@@ -30,13 +31,15 @@ public class ProdutoController {
         return new ResponseEntity<>(produtoService.buscarProduto(codigo), HttpStatus.OK);
     }
 
+    @Transactional
     @PostMapping
-    public ResponseEntity<Produto> cadastrarProduto(@RequestBody @Valid Produto produto) throws ProdutoException {
+    public ResponseEntity<Produto> cadastrarProduto(@Valid @RequestBody Produto produto) throws ProdutoException {
         return new ResponseEntity<>(produtoService.cadastrarProduto(produto), HttpStatus.CREATED);
     }
 
+    @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizarProduto(@RequestBody @Valid Produto produto,@PathVariable Long id) throws ProdutoException {
+    public ResponseEntity<Produto> atualizarProduto(@Valid @RequestBody Produto produto, @PathVariable Long id) throws ProdutoException {
         return new ResponseEntity<>(produtoService.atualizaProduto(produto,id), HttpStatus.OK);
     }
 }

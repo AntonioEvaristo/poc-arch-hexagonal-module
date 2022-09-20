@@ -3,18 +3,18 @@ package br.com.ae.domain.model;
 import br.com.ae.domain.enums.ProdutoDisponibilidade;
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Builder
 @Setter
 @Getter
 @EqualsAndHashCode
 @ToString
-public final class Produto {
+public class Produto {
 
     private Long id;
     @Positive(message = "Codigo deve ser positivo")
@@ -24,7 +24,7 @@ public final class Produto {
     @NotBlank(message = "Nome não pode ser nulo ou vazio")
     private String nome;
 
-    @NotBlank(message = "Descrição não pode ser nula ou vazia")
+    @NotBlank(message = " Descrição não pode ser nula ou vazia")
     private String descricao;
 
     @Positive(message = "Valor deve ser positivo")
@@ -36,7 +36,9 @@ public final class Produto {
     private Integer quantidade;
 
     @NotNull(message = "Produto deve ter uma categoria")
+    @Valid
     private Categoria categoria;
 
+    @NotNull(message = "Produto Disponibilidade não pode ser nulo")
     private ProdutoDisponibilidade produtoDisponibilidade;
 }
