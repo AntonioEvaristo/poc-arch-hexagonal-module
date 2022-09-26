@@ -28,10 +28,10 @@ public class ExceptionHandle {
         List<ErroProdutoDto> errosProdutoDto = new ArrayList<>();
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         fieldErrors.forEach(e -> errosProdutoDto
-                .add(new ErroProdutoDto(HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                        HttpStatus.BAD_REQUEST.value(), getMensagemErro(e), LocalDateTime.now())));
+                .add(new ErroProdutoDto(getMensagemErro(e), LocalDateTime.now())));
         return errosProdutoDto;
     }
+
     private String getMensagemErro(FieldError e) {
         return messageSource.getMessage(e, LocaleContextHolder.getLocale());
     }
@@ -39,7 +39,7 @@ public class ExceptionHandle {
     @ExceptionHandler(ProdutoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErroProdutoDto handleProduto(ProdutoException exception) {
-        return new ErroProdutoDto(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), exception.getMessage(), LocalDateTime.now());
+        return new ErroProdutoDto(exception.getMessage(), LocalDateTime.now());
     }
 
 }
