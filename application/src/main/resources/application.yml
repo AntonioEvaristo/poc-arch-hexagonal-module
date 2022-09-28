@@ -20,3 +20,18 @@ spring:
 logging:
   level:
     web: DEBUG
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    enableb-by-default: false
+    web:
+      exposure:
+        include: 'health,prometheus'
+
+
