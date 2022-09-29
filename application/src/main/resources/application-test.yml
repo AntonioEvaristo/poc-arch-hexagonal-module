@@ -13,8 +13,10 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-      show_sql: true
-      format_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    show_sql: true
   mvc:
     pathmatch-strategy: ant-path-matcher
 
