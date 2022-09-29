@@ -77,7 +77,7 @@ public final class ProdutoService implements IProdutoService {
     public Produto atualizaProduto(Produto produto, Long id) throws ProdutoException {
         Produto produtoEntity = produtoRepository.findById(id).orElseThrow(() -> {
             log.error("Produto não existe! {}", produto);
-            return new ProdutoException("Produto não existe, verifique o codigo do produto!!");
+            return new ProdutoException("Produto não existe, verifique o codigo/id do produto!!");
         });
         produto.setId(produtoEntity.getId());
         produto.getCategoria().setId(produtoEntity.getCategoria().getId());

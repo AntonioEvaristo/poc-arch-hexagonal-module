@@ -16,6 +16,25 @@ server:
 spring:
   application:
     name: poc-hexagonal
+  datasource:
+    url: jdbc:postgresql://localhost:5432/poc_hexagonal_db
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: true
+    generate-ddl: true
+    show_sql: true
+    hibernate:
+      dll-auto: update
+
+  mvc:
+    pathmatch-strategy: ant-path-matcher
 
 logging:
   level:
