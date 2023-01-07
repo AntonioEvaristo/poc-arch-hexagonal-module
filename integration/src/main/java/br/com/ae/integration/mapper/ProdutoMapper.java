@@ -12,19 +12,9 @@ public abstract class ProdutoMapper {
 
     public static final ProdutoMapper INSTANCE = Mappers.getMapper(ProdutoMapper.class);
 
-    @Mapping(target = "id", source = "produtoEntity.id")
-    @Mapping(target = "categoria.id", source = "produtoEntity.categoriaEntity.id")
+    @Mapping(target = "categoria", source = "produtoEntity.categoriaEntity")
     public abstract Produto produtoEntityToProduto(ProdutoEntity produtoEntity);
-    public abstract Categoria categoriaEntityToCategoria(CategoriaEntity categoriaEntity);
-    public abstract CategoriaEntity categoriaToCategoriaEntity(Categoria categoria);
-
-    @Mapping(target = "nome", source = "produto.nome")
-    @Mapping(target = "codigo", source = "produto.codigo")
-    @Mapping(target = "categoriaEntity", source = "categoria")
-    @Mapping(target = "id", ignore = true)
-    public abstract ProdutoEntity produtoToProdutoEntitySave(Produto produto, CategoriaEntity categoria);
-    @Mapping(target = "id", source = "produto.id")
-    @Mapping(target = "categoriaEntity.id", source = "produto.categoria.id")
+    @Mapping(target = "categoriaEntity", source ="produto.categoria")
     public abstract ProdutoEntity produtoToProdutoEntity(Produto produto);
 
 }

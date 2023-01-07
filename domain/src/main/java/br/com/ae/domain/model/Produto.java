@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 public class Produto {
 
     private Long id;
-    @Positive(message = "Codigo deve ser positivo")
     @NotNull(message = "Codigo não pode ser nulo")
     private String codigo;
 

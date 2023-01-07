@@ -27,12 +27,10 @@ public class ProdutoRepository implements IProdutoRepository {
 
     @Override
     public Produto save(Produto produto) {
-        ProdutoEntity produtoEntity = produtoEntityRepository.save(getProdutoEntity(produto));
-        return ProdutoMapper.INSTANCE.produtoEntityToProduto(produtoEntity);
-    }
-
-    private ProdutoEntity getProdutoEntity(Produto produto) {
-        return ProdutoMapper.INSTANCE.produtoToProdutoEntitySave(produto, buscarCategoria(produto));
+        return ProdutoMapper
+                .INSTANCE
+                .produtoEntityToProduto(produtoEntityRepository
+                        .save(ProdutoMapper.INSTANCE.produtoToProdutoEntity(produto)));
     }
 
     private CategoriaEntity buscarCategoria(Produto produto) {
@@ -44,12 +42,6 @@ public class ProdutoRepository implements IProdutoRepository {
         return produtoEntityRepository.findAll()
                 .stream()
                 .map(ProdutoMapper.INSTANCE::produtoEntityToProduto).collect(Collectors.toList());
-    }
-
-    @Override
-    public Produto update(Produto produto) {
-        ProdutoEntity produtoEntity = produtoEntityRepository.save(ProdutoMapper.INSTANCE.produtoToProdutoEntity(produto));
-        return ProdutoMapper.INSTANCE.produtoEntityToProduto(produtoEntity);
     }
 
     @Override

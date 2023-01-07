@@ -81,9 +81,9 @@ public final class ProdutoService implements IProdutoService {
         });
         produto.setId(produtoEntity.getId());
         produto.getCategoria().setId(produtoEntity.getCategoria().getId());
-        Produto produtoSave = produtoRepository.update(produto);
-        log.info("Produto atualizado! {}", produtoSave);
-        return produtoSave;
+        Produto produtoUpdate = produtoRepository.save(produto);
+        log.info("Produto atualizado! {}", produtoUpdate);
+        return produtoUpdate;
 
     }
 

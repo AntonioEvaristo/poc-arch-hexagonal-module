@@ -204,9 +204,9 @@ public class ProdutoServiceTest {
                         .build())
                 .build();
         Mockito.when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
-        Mockito.when(produtoRepository.update(prd)).thenReturn(prd);
+        Mockito.when(produtoRepository.save(prd)).thenReturn(prd);
         Produto produtoAtualizado = produtoService.atualizaProduto(prd, id);
-        Mockito.verify(produtoRepository, Mockito.times(1)).update(prd);
+        Mockito.verify(produtoRepository, Mockito.times(1)).save(prd);
         Mockito.verify(produtoRepository, Mockito.times(1)).findById(id);
         Assert.assertNotNull(produtoAtualizado);
         Assert.assertEquals(prd.getQuantidade(), produtoAtualizado.getQuantidade());
@@ -219,7 +219,7 @@ public class ProdutoServiceTest {
         Long id = 1L;
         Mockito.when(produtoRepository.findById(produto.getId())).thenReturn(Optional.empty());
         expectedException.expect(ProdutoException.class);
-        expectedException.expectMessage("Produto não existe, verifique o codigo do produto!!");
+        expectedException.expectMessage("Produto não existe, verifique o codigo/id do produto!!");
         produtoService.atualizaProduto(produto, id);
 
     }

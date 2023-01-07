@@ -9,6 +9,5 @@ public interface IProdutoRepository {
     Optional<Produto> findByCodigo(String codigo);
     Produto save(Produto produto);
     List<Produto> findAll();
-    Produto update(Produto produto);
     Optional<Produto> findById(Long id);
 }
